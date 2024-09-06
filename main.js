@@ -4,7 +4,7 @@ let speedMultiplier = 1;
 let items = []; // To keep track of all items for collision detection
 let collisionEnabled = false; // To control when collisions are enabled
 let randomnessValue = 40;
-let speedValue = 3.0;
+let speedValue = 2.5;
 
 // Update the randomnessValue based on slider input
 const randomnessSlider = document.getElementById('randomnessSlider');
