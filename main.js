@@ -5,6 +5,9 @@ let items = []; // To keep track of all items for collision detection
 let collisionEnabled = false; // To control when collisions are enabled
 let randomnessValue = 40;
 let speedValue = 2.5;
+document.getElementById('teamCount').innerHTML = 10;
+// Variable to control auto restart
+let autoRestartEnabled = false;
 
 // Update the randomnessValue based on slider input
 const randomnessSlider = document.getElementById('randomnessSlider');
@@ -15,6 +18,12 @@ randomnessSlider.addEventListener('input', () => {
 const speedSlider = document.getElementById('speedSlider');
 speedSlider.addEventListener('input', () => {
     speedValue = parseInt(speedSlider.value, 10);
+});
+
+// Add event listener for the checkbox
+const autoCheckbox = document.getElementById('auto');
+autoCheckbox.addEventListener('change', function() {
+    autoRestartEnabled = this.checked; // Update the variable based on checkbox state
 });
 
 // Function to create and animate bouncing items
@@ -89,7 +98,31 @@ function createTeam(teamClass) {
     items.push(item); // Add this item to the list of items
 }
 
-// Function to handle the collision and determine the winner
+// Function to check if all items are the same
+function checkForSameItems() {
+    const firstClass = items[0]?.classList[1]; // Get the class of the first item
+    return items.every(item => item.classList[1] === firstClass); // Check if all items have the same class
+}
+
+// Function to restart the game
+function restartGame() {
+    collisionEnabled = false; // Disable collisions
+
+    // Wait 3 seconds before removing all current items
+    setTimeout(() => {
+        items.forEach(item => item.remove());
+        items = []; // Clear the items array
+
+        // Start a new round
+        const itemCountValue = parseInt(countSlider.value, 10);
+        adjustItemsForTeam('scissors', itemCountValue);
+        adjustItemsForTeam('rock', itemCountValue);
+        adjustItemsForTeam('paper', itemCountValue);
+        collisionEnabled = true; // Re-enable collisions
+    }, 3000); // 3 seconds delay
+}
+
+// Modify the collision handling to check for auto restart
 function handleCollision(item1, item2) {
     const team1 = item1.classList[1]; // Get the team class of item1
     const team2 = item2.classList[1]; // Get the team class of item2
@@ -116,6 +149,11 @@ function handleCollision(item1, item2) {
         loser.className = `item ${winner.classList[1]}`; // Change team of loser
         loser.style.backgroundImage = winner.style.backgroundImage; // Update appearance
     }
+
+    // Check if all items are the same and restart if auto restart is enabled
+    if (autoRestartEnabled && checkForSameItems()) {
+        restartGame();
+    }
 }
 
 // Function to update item count based on the slider
@@ -125,6 +163,7 @@ countSlider.addEventListener('input', () => {
     adjustItemsForTeam('scissors', itemCount);
     adjustItemsForTeam('rock', itemCount);
     adjustItemsForTeam('paper', itemCount);
+    document.getElementById('teamCount').innerHTML = itemCount;
 });
 
 // Function to adjust items for each team
@@ -154,11 +193,18 @@ adjustItemsForTeam('paper', initialItemCount);
 
 // Enable collisions and hide the slider when the "fight" button is clicked
 document.getElementById('fightButton').addEventListener('click', function() {
+    if(autoCheckbox.checked) {
+        speedSlider.disabled = true;
+        speedSlider.style.display = 'none'; // Optionally hide it as well
+        randomnessSlider.disabled = true;
+        randomnessSlider.style.display = 'none'; // Optionally hide it as well
+        document.getElementById('teamCount').innerHTML = "";
+    }
     collisionEnabled = true;
     this.style.display = 'none'; // Hide the button after clicking
-
-    // Disable and hide the count slider
     const countSlider = document.getElementById('countSlider');
     countSlider.disabled = true;
     countSlider.style.display = 'none'; // Optionally hide it as well
+    autoCheckbox.disabled = true;
+    autoCheckbox.style.display = 'none'; // Optionally hide it as well
 });

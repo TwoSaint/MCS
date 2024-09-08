@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rock Paper Scissors Game</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+</head>
 </head>
 <body>
     <div id="gameContainer"></div>
@@ -14,6 +17,11 @@
         <input type="range" id="randomnessSlider" min="10" max="200" value="40">
         <input type="range" id="speedSlider" min="2" max="8" value="3">
         <input type="range" id="countSlider" min="2" max="33" value="10">
+        <input type="checkbox" id="auto">
+            
+    </div>
+    <div>
+        <h1 id="teamCount"></h1>
     </div>   
     <button id="fightButton">FIGHT!</button>
     <script src="main.js"></script>
